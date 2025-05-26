@@ -1,34 +1,39 @@
 const fs = require('fs').promises;
 const path = require('path');
+const archiver = require('archiver');
 
 const TOTAL_ARCHIVOS = 1000;
 const CARPETA = path.join(__dirname, 'promesas 2');
+const ZIP_FILE = path.join(__dirname, 'archivos.zip');
 
 // 1. Crear la carpeta si no existe
 fs.mkdir(CARPETA, { recursive: true })
   .then(() => {
     console.time('Tiempo Total');
 
-    // 2. Arreglo de promesas
-    const promesas = [];
+    // 2. Crear el archivo ZIP
+    const output = require('fs').createWriteStream(ZIP_FILE);
+    const archive = archiver('zip', {
+      zlib: { level: 9 } // Máxima compresión
+    });
 
+    // Manejar eventos del archivo ZIP
+    output.on('close', () => {
+      console.log(`✅ Archivo ZIP creado con ${archive.pointer()} bytes`);
+      console.timeEnd('Tiempo Total');
+    });
+
+    archive.pipe(output);
+
+    // 3. Crear y agregar archivos al ZIP
     for (let i = 1; i <= TOTAL_ARCHIVOS; i++) {
-      const nombreArchivo = `archivo_${i}.txt`;
-      const contenido = `Este es el archivo número ${i}`;
-      const ruta = path.join(CARPETA, nombreArchivo);
-
-      // 3. Crear una promesa para cada archivo y agregarla al arreglo
-      const promesa = fs.writeFile(ruta, contenido);
-      promesas.push(promesa);
+      const contenido = "Este es el archivo número ${i}";
+      archive.append(`contenido, { name: archivo_${i}.txt }`);
     }
 
-    // 4. Ejecutar todas las promesas al mismo tiempo
-    return Promise.all(promesas);
-  })
-  .then(() => {
-    console.log(`✅ Se crearon ${TOTAL_ARCHIVOS} archivos con éxito.`);
-    console.timeEnd('Tiempo Total');
+    // 4. Finalizar el archivo ZIP
+    return archive.finalize();
   })
   .catch((error) => {
-    console.error(' Error durante el proceso:', error);
-  });
+    console.error('Error durante el proceso:',error);
+  });
