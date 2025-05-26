@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const { timeEnd } = require('console');
 const path = require('path');
 
 const TOTAL_ARCHIVOS = 1000;
