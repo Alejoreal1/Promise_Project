@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Archivos ZIP</title>
+  <style>
+    body {
+      background: #f5f6fa;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 2rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    h1 {
+      color: #273c75;
+      margin-bottom: 1rem;
+    }
+    button {
+      background: #44bd32;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #009432;
+    }
+    #status {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      color: #353b48;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Generador de Archivos ZIP</h1>
+    <p>Haz clic para crear un archivo ZIP con 1000 archivos de texto.</p>
+    <button onclick="generarZip()">Generar ZIP</button>
+    <div id="status"></div>
+  </div>
+  <script>
+    function generarZip() {
+      document.getElementById('status').textContent = 'Ejecuta el script index.js con Node.js para generar el ZIP.';
+      // Si tienes un backend, aquí puedes hacer una petición fetch al servidor para ejecutar el proceso.
+    }
+  </script>
+</body>
+</html>
