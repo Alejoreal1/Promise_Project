@@ -94,7 +94,7 @@ async function sendToMistral(inputText) {
 async function sendToDeepSeek(inputText) {
     const responseContainer = document.getElementById('responseDeepSeek');
     const loader = document.getElementById('loaderAll');
-    const apiKey = "csk-en9cvrmh5j85r2prdxj6hnrjn43vf8wy8852kpewdrx6trmh";
+    const apiKey = "sk-4fb7d531ac2147d7b77827b4f4e38fbf";
 
     if (!inputText.trim()) {
         responseContainer.textContent = "Por favor, ingresa algún texto.";
