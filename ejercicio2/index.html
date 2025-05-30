@@ -83,37 +83,17 @@
   </style>
 </head>
 <body>
-
-  <!-- Ventana para Gemini -->
   <div class="container">
-    <h1>Interactuar con Gemini API 🚀</h1>
-    <textarea id="inputGemini" placeholder="Escribe tu pregunta para Gemini..."></textarea>
-    <button onclick="sendToGemini()">Enviar a Gemini</button>
-    <div class="loader" id="loaderGemini"></div>
+    <h1>Pregunta a Gemini, Mistral y DeepSeek</h1>
+    <textarea id="inputAll" placeholder="Escribe tu pregunta para las 3 IA..."></textarea>
+    <button onclick="sendToAll()">Enviar a todas</button>
+    <div class="loader" id="loaderAll"></div>
     <h2>Respuesta de Gemini:</h2>
     <div class="responseContainer" id="responseGemini"></div>
-  </div>
-
-  <!-- Ventana para Mistral -->
-  <div class="container">
-    <h1>Interactuar con Mistral API 🌬️</h1>
-    <textarea id="inputMistral" placeholder="Escribe tu pregunta para Mistral..."></textarea>
-    <button onclick="sendToMistral()">Enviar a Mistral</button>
-    <div class="loader" id="loaderMistral"></div>
     <h2>Respuesta de Mistral:</h2>
     <div class="responseContainer" id="responseMistral"></div>
-  </div>
-
-  <!-- Ventana para DeepSeek -->
-  <div class="container">
-    <h1>Interactuar con DeepSeek API 🧠</h1>
-    <textarea id="inputDeepSeek" placeholder="Escribe tu pregunta para DeepSeek..."></textarea>
-    <button onclick="sendToDeepSeek()">Enviar a DeepSeek</button>
-    <div class="loader" id="loaderDeepSeek"></div>
     <h2>Respuesta de DeepSeek:</h2>
     <div class="responseContainer" id="responseDeepSeek"></div>
   </div>
-
   <script src="script.js"></script>
 </body>
-</html>

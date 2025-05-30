@@ -1,8 +1,6 @@
-// === Función para Gemini ===
-async function sendToGemini() {
-    const inputText = document.getElementById('inputGemini').value;
+async function sendToGemini(inputText) {
     const responseContainer = document.getElementById('responseGemini');
-    const loader = document.getElementById('loaderGemini');
+    const loader = document.getElementById('loaderAll');
     const apiKey = "AIzaSyDs-mJ6UWyvcac3yuTOt7mYFjodxzTMekw";
 
     if (!inputText.trim()) {
@@ -25,8 +23,6 @@ async function sendToGemini() {
             body: JSON.stringify(requestBody)
         });
 
-        loader.style.display = 'none';
-
         const data = await response.json();
 
         if (!response.ok) {
@@ -39,18 +35,17 @@ async function sendToGemini() {
         responseContainer.textContent = text || "No se recibió contenido válido.";
 
     } catch (error) {
-        loader.style.display = 'none';
         console.error("Error:", error);
         responseContainer.textContent = "Error al conectar con la API.";
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
-// === Función para Mistral ===
-async function sendToMistral() {
-    const inputText = document.getElementById('inputMistral').value;
+async function sendToMistral(inputText) {
     const responseContainer = document.getElementById('responseMistral');
-    const loader = document.getElementById('loaderMistral');
-    const apiKey = "nUk5hG9G5t3Mb9agLiP3gvVCOjU8Pmsx"; // Reemplaza con tu clave real
+    const loader = document.getElementById('loaderAll');
+    const apiKey = "nUk5hG9G5t3Mb9agLiP3gvVCOjU8Pmsx";
 
     if (!inputText.trim()) {
         responseContainer.textContent = "Por favor, ingresa algún texto.";
@@ -60,9 +55,9 @@ async function sendToMistral() {
     responseContainer.textContent = "";
     loader.style.display = 'block';
 
-    const API_URL = "https://api.mistral.ai/v1/chat/completions"; // Verifica si este endpoint es correcto para tu proveedor
+    const API_URL = "https://api.mistral.ai/v1/chat/completions";
     const requestBody = {
-        model: "mistral-medium", // O el modelo que uses
+        model: "mistral-medium",
         messages: [{ role: "user", content: inputText }],
         temperature: 0.7
     };
@@ -77,8 +72,6 @@ async function sendToMistral() {
             body: JSON.stringify(requestBody)
         });
 
-        loader.style.display = 'none';
-
         const data = await response.json();
 
         if (!response.ok) {
@@ -91,18 +84,17 @@ async function sendToMistral() {
         responseContainer.textContent = text || "No se recibió contenido válido.";
 
     } catch (error) {
-        loader.style.display = 'none';
         console.error("Error:", error);
         responseContainer.textContent = "Error al conectar con la API.";
+    } finally {
+        loader.style.display = 'none';
     }
 }
 
-// === Función para DeepSeek ===
-async function sendToDeepSeek() {
-    const inputText = document.getElementById('inputDeepSeek').value;
+async function sendToDeepSeek(inputText) {
     const responseContainer = document.getElementById('responseDeepSeek');
-    const loader = document.getElementById('loaderDeepSeek');
-    const apiKey = "sk-4fb7d531ac2147d7b77827b4f4e38fbf"; // Reemplaza con tu clave real
+    const loader = document.getElementById('loaderAll');
+    const apiKey = "csk-en9cvrmh5j85r2prdxj6hnrjn43vf8wy8852kpewdrx6trmh";
 
     if (!inputText.trim()) {
         responseContainer.textContent = "Por favor, ingresa algún texto.";
@@ -112,9 +104,9 @@ async function sendToDeepSeek() {
     responseContainer.textContent = "";
     loader.style.display = 'block';
 
-    const API_URL = "https://api.deepseek.com/v1/chat/completions"; // Verifica si este endpoint es correcto
+    const API_URL = "https://api.deepseek.com/v1/chat/completions";
     const requestBody = {
-        model: "deepseek-chat", // Ajusta si usas otro modelo
+        model: "deepseek-chat",
         messages: [{ role: "user", content: inputText }],
         temperature: 0.7
     };
@@ -129,8 +121,6 @@ async function sendToDeepSeek() {
             body: JSON.stringify(requestBody)
         });
 
-        loader.style.display = 'none';
-
         const data = await response.json();
 
         if (!response.ok) {
@@ -143,8 +133,26 @@ async function sendToDeepSeek() {
         responseContainer.textContent = text || "No se recibió contenido válido.";
 
     } catch (error) {
-        loader.style.display = 'none';
         console.error("Error:", error);
         responseContainer.textContent = "Error al conectar con la API.";
+    } finally {
+        loader.style.display = 'none';
     }
+}
+
+// Nueva función principal
+async function sendToAll() {
+    const inputText = document.getElementById('inputAll').value;
+    document.getElementById('loaderAll').style.display = 'block';
+    // Limpia respuestas previas
+    document.getElementById('responseGemini').textContent = '';
+    document.getElementById('responseMistral').textContent = '';
+    document.getElementById('responseDeepSeek').textContent = '';
+
+    await Promise.all([
+        sendToGemini(inputText),
+        sendToMistral(inputText),
+        sendToDeepSeek(inputText)
+    ]);
+    document.getElementById('loaderAll').style.display = 'none';
 }
