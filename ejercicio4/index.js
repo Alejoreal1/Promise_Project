@@ -13,7 +13,9 @@ const transporter = nodemailer.createTransport({
 const destinatarios = [
   'ahiguita696@gmail.com',
   'ahiguita393@gmail.com',
-  "mategomhol@gmail.com"
+  'lauraguirregarcia@gmail.com',
+  'brayansalazzar1221@gmail.com'
+  
  
 
 ];
@@ -23,8 +25,8 @@ async function enviarCorreo(destinatario) {
   const opcDeCorreo = {
     from: '"Alejandro Higuita" <ahiguita696@gmail.com>',
     to: destinatario,
-    subject: '¡Saludos desde un correo corporativo muy legal por favor digite los ultimos 4 digitos de la tarjeta ',
-    text: `Hola ${destinatario}, este es un correo masivo enviado con Node.js 🚀.`
+    subject: '¡Hola a todos',
+    text: `Hola ${destinatario}, este es un correo masivo utilizando  Node.js .`
   };
 
   try {
