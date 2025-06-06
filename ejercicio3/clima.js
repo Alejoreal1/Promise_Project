@@ -1,4 +1,4 @@
-// APIs del clima para Medellín
+  // APIs del clima para Medellín
 const urls = [
   'https://api.open-meteo.com/v1/forecast?latitude=6.25184&longitude=-75.56359&current_weather=true',
   'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=6.25184&lon=75.56359'
