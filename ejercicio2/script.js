@@ -1,69 +1,163 @@
-async function sendToGemini() {
-            const inputText = document.getElementById('inputText').value;
-            const responseContainer = document.getElementById('responseContainer');
-            const loader = document.getElementById('loader');
-            const apiKey = "";
+async function sendToGemini(inputText) {
+  const responseContainer = document.getElementById("responseGemini");
+  const loader = document.getElementById("loaderAll");
+  const apiKey = "AIzaSyDs-mJ6UWyvcac3yuTOt7mYFjodxzTMekw";
 
-            if (!inputText.trim()) {
-                responseContainer.textContent = "Por favor, ingresa algún texto.";
-                return;
-            }
+  if (!inputText.trim()) {
+    responseContainer.textContent = "Por favor, ingresa algún texto.";
+    return;
+  }
 
-            if (apiKey === "YOUR_API_KEY") {
-                responseContainer.innerHTML = "<strong>Error:</strong> Por favor, reemplaza 'YOUR_API_KEY' con tu clave de API real en el código JavaScript.";
-                return;
-            }
+  responseContainer.textContent = "";
+  loader.style.display = "block";
 
-            responseContainer.textContent = ""; // Limpiar respuesta anterior
-            loader.style.display = 'block'; // Mostrar loader
+  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  const requestBody = {
+    contents: [{ parts: [{ text: inputText }] }],
+  };
 
-            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    });
 
-            const requestBody = {
-                "contents": [
-                    {
-                        "parts": [
-                            {
-                                "text": inputText
-                            }
-                        ]
-                    }
-                ]
-            };
+    const data = await response.json();
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestBody)
-                });
+    if (!response.ok) {
+      console.error("Error en la API:", data);
+      responseContainer.textContent = `Error: ${response.status} - ${
+        data.error?.message || "Error desconocido"
+      }`;
+      return;
+    }
 
-                loader.style.display = 'none'; // Ocultar loader
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    responseContainer.textContent = text || "No se recibió contenido válido.";
+  } catch (error) {
+    console.error("Error:", error);
+    responseContainer.textContent = "Error al conectar con la API.";
+  } finally {
+    loader.style.display = "none";
+  }
+}
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error("Error en la API:", errorData);
-                    responseContainer.textContent = `Error: ${response.status} - ${errorData.error?.message || 'Error desconocido. Revisa la consola para más detalles.'}`;
-                    return;
-                }
+async function sendToMistral(inputText) {
+  const responseContainer = document.getElementById("responseMistral");
+  const loader = document.getElementById("loaderAll");
+  const apiKey = "nUk5hG9G5t3Mb9agLiP3gvVCOjU8Pmsx";
 
-                const data = await response.json();
+  if (!inputText.trim()) {
+    responseContainer.textContent = "Por favor, ingresa algún texto.";
+    return;
+  }
 
-                if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
-                    responseContainer.textContent = data.candidates[0].content.parts[0].text;
-                } else if (data.promptFeedback && data.promptFeedback.blockReason) {
-                    responseContainer.textContent = `Solicitud bloqueada: ${data.promptFeedback.blockReason}. Razón: ${data.promptFeedback.blockReasonMessage || 'No se proporcionó un mensaje específico.'}`;
-                }
-                else {
-                    responseContainer.textContent = "No se recibió contenido en la respuesta o la estructura es inesperada.";
-                    console.log("Respuesta completa de la API:", data);
-                }
+  responseContainer.textContent = "";
+  loader.style.display = "block";
 
-            } catch (error) {
-                loader.style.display = 'none'; // Ocultar loader
-                console.error("Error en la solicitud fetch:", error);
-                responseContainer.textContent = "Error al conectar con la API. Revisa la consola para más detalles.";
-            }
-        }
+  const API_URL = "https://api.mistral.ai/v1/chat/completions";
+  const requestBody = {
+    model: "mistral-medium",
+    messages: [{ role: "user", content: inputText }],
+    temperature: 0.7,
+  };
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Error en la API:", data);
+      responseContainer.textContent = `Error: ${response.status} - ${
+        data.error?.message || "Error desconocido"
+      }`;
+      return;
+    }
+
+    const text = data?.choices?.[0]?.message?.content;
+    responseContainer.textContent = text || "No se recibió contenido válido.";
+  } catch (error) {
+    console.error("Error:", error);
+    responseContainer.textContent = "Error al conectar con la API.";
+  } finally {
+    loader.style.display = "none";
+  }
+}
+
+async function sendToHuggingFace(inputText) {
+  const responseContainer = document.getElementById("responseHuggingFace");
+  const loader = document.getElementById("loaderAll");
+  const apiKey = "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";
+
+  if (!inputText.trim()) {
+    responseContainer.textContent = "Por favor, ingresa algún texto.";
+    return;
+  }
+
+  responseContainer.textContent = "";
+  loader.style.display = "block";
+
+  // Modelo público sin restricciones
+  const API_URL = "https://api-inference.huggingface.co/models/gpt2";
+  const requestBody = {
+    inputs: inputText,
+    parameters: { max_new_tokens: 50, temperature: 0.7 },
+  };
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const textResponse = await response.text();
+    let data;
+    try {
+      data = JSON.parse(textResponse);
+    } catch {
+      responseContainer.textContent = `Error: ${response.status} - ${textResponse}`;
+      loader.style.display = "none";
+      return;
+    }
+
+    if (!response.ok) {
+      responseContainer.textContent = `Error: ${response.status} - ${
+        data.error || JSON.stringify(data)
+      }`;
+      return;
+    }
+
+    const text =
+      data?.[0]?.generated_text ||
+      data?.generated_text ||
+      "No se recibió contenido válido.";
+    responseContainer.textContent = text;
+  } catch (error) {
+    responseContainer.textContent =
+      "Error al conectar con la API de Hugging Face: " + error;
+  } finally {
+    loader.style.display = "none";
+  }
+}
+
+async function sendToAll() {
+  const inputText = document.getElementById("inputAll").value;
+  await Promise.all([
+    sendToGemini(inputText),
+    sendToMistral(inputText),
+    sendToHuggingFace(inputText),
+  ]);
+}
