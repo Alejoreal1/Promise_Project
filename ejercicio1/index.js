@@ -1,8 +1,13 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+
 const TOTAL_ARCHIVOS = 100;
 const CARPETA = path.join(__dirname, 'promesas 2');
+
+const TOTAL_ARCHIVOS = 1000;
+const CARPETA = path.join(__dirname, 'Carpeta de archivos generados');
+
 
 // 1. Crear la carpeta si no existe
 fs.mkdir(CARPETA, { recursive: true })
