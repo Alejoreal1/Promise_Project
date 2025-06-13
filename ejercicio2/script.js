@@ -9,12 +9,14 @@ async function sendToGemini(inputText) {
   }
 
   responseContainer.textContent = "";
-  loader.style.display = "block";
+  loader.style.display = "block";// Ocultar loader
 
   const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
   const requestBody = {
     contents: [{ parts: [{ text: inputText }] }],
   };
+
+  
 
   try {
     const response = await fetch(API_URL, {
@@ -39,7 +41,7 @@ async function sendToGemini(inputText) {
     console.error("Error:", error);
     responseContainer.textContent = "Error al conectar con la API.";
   } finally {
-    loader.style.display = "none";
+    loader.style.display = "none";// Ocultar loader
   }
 }
 
